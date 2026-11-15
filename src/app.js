@@ -1,4 +1,4 @@
-import { EXPENSE_CATEGORIES, INCOME_CATEGORIES, PAYMENTS, localDate, normalizeEntry, parseAmount, summarize, getDemoEntries, safeParseBackup } from './ledger.js';
+import { EXPENSE_CATEGORIES, INCOME_CATEGORIES, PAYMENTS, localDate, normalizeEntry, parseAmount, summarize, getDemoEntries, safeParseBackup } from './ledger.js?v=purple';
 import { icon } from './icons.js';
 
 const DATA_KEY = 'chagok.ledger.v1';
@@ -8,7 +8,7 @@ const allCategories = [...EXPENSE_CATEGORIES, ...INCOME_CATEGORIES];
 const escape = (value = '') => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const won = value => `${money.format(Math.round(value))}원`;
 const shortMoney = value => value >= 100000000 ? `${(value / 100000000).toFixed(1)}억` : value >= 10000 ? `${money.format(Math.round(value / 1000) / 10)}만` : money.format(value);
-const category = id => allCategories.find(item => item.id === id) || { label: '기타', color: '#98a397', icon: 'other' };
+const category = id => allCategories.find(item => item.id === id) || { label: '기타', color: '#aca0ba', icon: 'other' };
 const categoryIcon = id => icon(['food','cafe','shopping','transport','living','health','culture','salary','bonus','side','allowance'].includes(id) ? id : 'other');
 const today = () => localDate();
 let entries = [];
@@ -77,7 +77,7 @@ function statsCards(summary) {
   const change = summary.previousExpense > 0 ? `${previous} 대비 ${Math.abs(summary.changePercent).toFixed(1)}% ${summary.changePercent > 0 ? '늘었어요' : summary.changePercent < 0 ? '줄었어요' : '같아요'}` : `${previous} 지출과 차곡차곡 비교해요`;
   return `<section class="stats-grid" aria-label="기간별 요약">
     <article class="stat-card expense-card"><div class="stat-label">${interval} 지출<span class="stat-icon">${icon('arrowUp')}</span></div><div class="stat-amount">${money.format(summary.expense)}<span>원</span></div><div class="stat-foot">${icon(summary.changePercent > 0 ? 'arrowUp' : 'arrowDown')} ${change}</div></article>
-    <article class="stat-card"><div class="stat-label">${interval} 수입<span class="stat-icon income-icon">${icon('arrowDown')}</span></div><div class="stat-amount">${money.format(summary.income)}<span>원</span></div><div class="stat-foot"><span class="tiny-dot green"></span>월급부터 작은 부수입까지</div></article>
+    <article class="stat-card"><div class="stat-label">${interval} 수입<span class="stat-icon income-icon">${icon('arrowDown')}</span></div><div class="stat-amount">${money.format(summary.income)}<span>원</span></div><div class="stat-foot"><span class="tiny-dot income-marker"></span>월급부터 작은 부수입까지</div></article>
     <article class="stat-card"><div class="stat-label">${interval} 수입 − 지출<span class="stat-icon">${icon('wallet')}</span></div><div class="stat-amount ${summary.balance < 0 ? 'negative' : ''}">${money.format(summary.balance)}<span>원</span></div><div class="stat-foot">${summary.balance >= 0 ? '차곡차곡 남긴 나의 여유' : '이번 기간에는 지출이 더 많아요'}</div></article>
     <article class="stat-card"><div class="stat-label">하루 평균 지출<span class="stat-icon">${icon('calendar')}</span></div><div class="stat-amount">${money.format(summary.dailyAverage)}<span>원</span></div><div class="stat-foot">${money.format(summary.days)}일을 기준으로 계산했어요</div></article>
   </section>`;
@@ -95,22 +95,22 @@ function spendingChart(summary, expanded = false) {
   const ticks = Array.from({ length: 5 }, (_, i) => {
     const y = top + chartHeight * i / 4;
     const label = ceiling * (1 - i / 4);
-    return `<line x1="${left}" y1="${y}" x2="${width - right}" y2="${y}" stroke="#e9ece7" stroke-dasharray="3 5"/><text x="${left - 12}" y="${y + 4}" text-anchor="end" class="chart-axis">${label ? shortMoney(Math.round(label)) : '0'}</text>`;
+    return `<line x1="${left}" y1="${y}" x2="${width - right}" y2="${y}" stroke="#ece5f2" stroke-dasharray="3 5"/><text x="${left - 12}" y="${y + 4}" text-anchor="end" class="chart-axis">${label ? shortMoney(Math.round(label)) : '0'}</text>`;
   }).join('');
   const bars = series.map((row, i) => {
     const x = left + i * gap + gap * .22;
     const barHeight = row[state.chartType] / ceiling * chartHeight;
     const active = row.key === today() || state.selectedDay === row.key;
-    return `<g class="chart-column" tabindex="0" data-chart-key="${row.key}" role="img" aria-label="${escape(row.label)} ${state.chartType === 'expense' ? '지출' : '수입'} ${won(row[state.chartType])}"><title>${escape(row.key)} · ${state.chartType === 'expense' ? '지출' : '수입'} ${won(row[state.chartType])}</title><rect x="${x}" y="${top + chartHeight - barHeight}" width="${gap * .56}" height="${Math.max(barHeight, 1.5)}" rx="${Math.min(gap * .15, 4)}" fill="${active ? '#395c47' : state.chartType === 'income' ? '#9caf99' : '#b8cbb1'}"/>${(state.mode === 'year' || i === 0 || (i + 1) % 5 === 0 || i === series.length - 1) ? `<text x="${left + i * gap + gap / 2}" y="${height - 9}" text-anchor="middle" class="chart-axis">${state.mode === 'year' ? `${i + 1}월` : `${i + 1}일`}</text>` : ''}</g>`;
+    return `<g class="chart-column" tabindex="0" data-chart-key="${row.key}" role="img" aria-label="${escape(row.label)} ${state.chartType === 'expense' ? '지출' : '수입'} ${won(row[state.chartType])}"><title>${escape(row.key)} · ${state.chartType === 'expense' ? '지출' : '수입'} ${won(row[state.chartType])}</title><rect x="${x}" y="${top + chartHeight - barHeight}" width="${gap * .56}" height="${Math.max(barHeight, 1.5)}" rx="${Math.min(gap * .15, 4)}" fill="${active ? '#7656a3' : state.chartType === 'income' ? '#9688c2' : '#bba5d5'}"/>${(state.mode === 'year' || i === 0 || (i + 1) % 5 === 0 || i === series.length - 1) ? `<text x="${left + i * gap + gap / 2}" y="${height - 9}" text-anchor="middle" class="chart-axis">${state.mode === 'year' ? `${i + 1}월` : `${i + 1}일`}</text>` : ''}</g>`;
   }).join('');
   const most = values.indexOf(Math.max(...values));
-  return `<section class="panel chart-panel ${expanded ? 'expanded-chart' : ''}"><div class="panel-heading"><div><h2>${state.mode === 'month' ? '일별' : '월별'} ${state.chartType === 'expense' ? '지출' : '수입'} 흐름</h2><p>${state.mode === 'month' ? '하루하루의' : '한 해 동안의'} 기록을 한눈에 살펴보세요.</p></div><div class="sub-segmented"><button class="${state.chartType === 'expense' ? 'active' : ''}" data-action="chart-type" data-value="expense" aria-pressed="${state.chartType === 'expense'}">지출</button><button class="${state.chartType === 'income' ? 'active' : ''}" data-action="chart-type" data-value="income" aria-pressed="${state.chartType === 'income'}">수입</button></div></div><div class="chart-legend"><span class="tiny-dot sage"></span>${state.chartType === 'expense' ? '지출 금액' : '수입 금액'}<span class="chart-unit">단위: 원</span></div><div class="bar-chart"><svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${state.mode === 'month' ? '일별' : '월별'} ${state.chartType === 'expense' ? '지출' : '수입'} 막대 그래프">${ticks}${bars}</svg></div><div class="chart-insight">${icon('sparkle')}<span>${max > 1 ? `<strong>${state.mode === 'month' ? `${Number(series[most].key.slice(-2))}일` : `${most + 1}월`}</strong>에 가장 ${state.chartType === 'expense' ? '많이 지출' : '많은 수입을 기록'}했어요.<span class="insight-amount">${won(values[most])}</span>` : '첫 기록이 쌓이면 나의 흐름이 보여요.'}</span></div></section>`;
+  return `<section class="panel chart-panel ${expanded ? 'expanded-chart' : ''}"><div class="panel-heading"><div><h2>${state.mode === 'month' ? '일별' : '월별'} ${state.chartType === 'expense' ? '지출' : '수입'} 흐름</h2><p>${state.mode === 'month' ? '하루하루의' : '한 해 동안의'} 기록을 한눈에 살펴보세요.</p></div><div class="sub-segmented"><button class="${state.chartType === 'expense' ? 'active' : ''}" data-action="chart-type" data-value="expense" aria-pressed="${state.chartType === 'expense'}">지출</button><button class="${state.chartType === 'income' ? 'active' : ''}" data-action="chart-type" data-value="income" aria-pressed="${state.chartType === 'income'}">수입</button></div></div><div class="chart-legend"><span class="tiny-dot chart-marker"></span>${state.chartType === 'expense' ? '지출 금액' : '수입 금액'}<span class="chart-unit">단위: 원</span></div><div class="bar-chart"><svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${state.mode === 'month' ? '일별' : '월별'} ${state.chartType === 'expense' ? '지출' : '수입'} 막대 그래프">${ticks}${bars}</svg></div><div class="chart-insight">${icon('sparkle')}<span>${max > 1 ? `<strong>${state.mode === 'month' ? `${Number(series[most].key.slice(-2))}일` : `${most + 1}월`}</strong>에 가장 ${state.chartType === 'expense' ? '많이 지출' : '많은 수입을 기록'}했어요.<span class="insight-amount">${won(values[most])}</span>` : '첫 기록이 쌓이면 나의 흐름이 보여요.'}</span></div></section>`;
 }
 
 function categoryPanel(summary, detailed = false) {
   const populated = summary.byCategory.filter(item => item.amount > 0);
   let total = 0;
-  const gradient = populated.length ? populated.map(item => { const start = total; total += item.percent; return `${item.color} ${start}% ${total}%`; }).join(', ') : '#edf0e9 0% 100%';
+  const gradient = populated.length ? populated.map(item => { const start = total; total += item.percent; return `${item.color} ${start}% ${total}%`; }).join(', ') : '#f0eaf6 0% 100%';
   return `<section class="panel category-panel"><div class="panel-heading"><div><h2>어디에 썼을까요?</h2><p>카테고리별 지출 비중</p></div>${icon('chart', 'muted')}</div><div class="donut-wrap"><div class="donut" style="background:conic-gradient(${gradient})" role="img" aria-label="${populated.map(row => `${row.label} ${Math.round(row.percent)}%`).join(', ') || '지출 기록 없음'}"><div class="donut-center"><span>총 지출</span><strong>${money.format(summary.expense)}<small>원</small></strong><span class="donut-caption">${populated.length}개 카테고리</span></div></div></div><div class="category-legend">${(detailed ? populated : populated.slice(0, 4)).map(row => `<div class="category-legend-row"><span class="legend-name"><i style="background:${row.color}"></i>${escape(row.label)}</span><strong>${won(row.amount)}</strong><span>${Math.round(row.percent)}%</span></div>`).join('') || '<p class="small-empty">아직 지출 기록이 없어요.</p>'}${!detailed && populated.length > 4 ? `<button class="text-button category-more" data-action="go-stats">그 외 ${populated.length - 4}개 카테고리 ${icon('chevronRight')}</button>` : ''}</div></section>`;
 }
 
@@ -124,7 +124,7 @@ function calendarPanel(summary) {
     const day = i + 1, key = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const amount = dayTotals.get(key);
     return `<button class="calendar-day ${key === today() ? 'is-today' : ''} ${state.selectedDay === key ? 'is-selected' : ''} ${!amount ? 'no-spend' : ''}" data-action="select-day" data-value="${key}" aria-pressed="${state.selectedDay === key}" aria-label="${month}월 ${day}일, 지출 ${won(amount?.expense || 0)}, 수입 ${won(amount?.income || 0)}"><span>${day}</span>${amount?.expense ? `<small>${shortMoney(amount.expense)}</small>` : '<small class="day-dash">·</small>'}${amount?.income ? '<i class="income-dot"></i>' : ''}</button>`;
-  }).join('')}</div><div class="calendar-footer"><span><i class="tiny-dot green"></i> 수입이 있는 날</span><span>지출 단위: 원</span></div></section>`;
+  }).join('')}</div><div class="calendar-footer"><span><i class="tiny-dot income-marker"></i> 수입이 있는 날</span><span>지출 단위: 원</span></div></section>`;
 }
 
 function transactionRow(row, table = false) {

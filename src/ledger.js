@@ -1,21 +1,21 @@
 /** Browser-independent accounting rules. All money is stored as integer KRW. */
 export const EXPENSE_CATEGORIES = Object.freeze([
-  { id: 'food', label: '식비', color: '#6c8d75', icon: 'utensils' },
-  { id: 'cafe', label: '카페·간식', color: '#c49d73', icon: 'coffee' },
-  { id: 'shopping', label: '쇼핑', color: '#8b9da9', icon: 'shopping-bag' },
-  { id: 'transport', label: '교통', color: '#a6ad88', icon: 'bus' },
-  { id: 'living', label: '생활·주거', color: '#80998d', icon: 'home' },
-  { id: 'health', label: '건강', color: '#c49291', icon: 'heart' },
-  { id: 'culture', label: '문화·여가', color: '#b0a1bc', icon: 'ticket' },
-  { id: 'other', label: '기타', color: '#b8b8ad', icon: 'more-horizontal' },
+  { id: 'food', label: '식비', color: '#7656a3', icon: 'utensils' },
+  { id: 'cafe', label: '카페·간식', color: '#b58daf', icon: 'coffee' },
+  { id: 'shopping', label: '쇼핑', color: '#8b83b8', icon: 'shopping-bag' },
+  { id: 'transport', label: '교통', color: '#b3a0ce', icon: 'bus' },
+  { id: 'living', label: '생활·주거', color: '#9475aa', icon: 'home' },
+  { id: 'health', label: '건강', color: '#c492b0', icon: 'heart' },
+  { id: 'culture', label: '문화·여가', color: '#a18dc6', icon: 'ticket' },
+  { id: 'other', label: '기타', color: '#b8b0c2', icon: 'more-horizontal' },
 ]);
 
 export const INCOME_CATEGORIES = Object.freeze([
-  { id: 'salary', label: '월급', color: '#5e8872', icon: 'briefcase' },
-  { id: 'bonus', label: '상여금', color: '#839f87', icon: 'gift' },
-  { id: 'side', label: '부수입', color: '#a0af96', icon: 'coins' },
-  { id: 'allowance', label: '용돈', color: '#bfad87', icon: 'wallet' },
-  { id: 'other-income', label: '기타 수입', color: '#9da8ad', icon: 'plus-circle' },
+  { id: 'salary', label: '월급', color: '#8571b0', icon: 'briefcase' },
+  { id: 'bonus', label: '상여금', color: '#a18bbb', icon: 'gift' },
+  { id: 'side', label: '부수입', color: '#b3a2cb', icon: 'coins' },
+  { id: 'allowance', label: '용돈', color: '#bc9ab8', icon: 'wallet' },
+  { id: 'other-income', label: '기타 수입', color: '#aaa0bd', icon: 'plus-circle' },
 ]);
 
 export const PAYMENTS = Object.freeze([
