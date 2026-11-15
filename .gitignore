@@ -1,0 +1,14 @@
+node_modules/
+dist/
+coverage/
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+!.env.example
+backups/
+chagok-backup-*.json
+chagok-*.csv
+차곡_백업_*.json
+차곡_*.csv
